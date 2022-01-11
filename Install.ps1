@@ -1,8 +1,8 @@
 #Connect-AZAccount -Subscription 80e2f4cb-198c-49b1-ad82-da207799c3f9
 
-$deploymentName = "AlsGlobal01"
-$deploymentNamek8s = "alsglobal-01-k8s"
-$resourceGroup = "ALSGlobal-ARM-01"
+$deploymentName = "AlsGlobal02"
+$deploymentNamek8s = "alsglobal-02-k8s"
+$resourceGroup = "ALSGlobalARM-02"
 
 $templateFile = "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/master/azuredeploy.json?token=GHSAT0AAAAAABMBPMD4FQSPWZ3BWKLIMKQKYO55DUQ"
 $templateFilek8s = "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/master/azuredeployk8s.json?token=GHSAT0AAAAAABMBPMD5VRAZ2WBWRD34YE2WYO55EBQ"

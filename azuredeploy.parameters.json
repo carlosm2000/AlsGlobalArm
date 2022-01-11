@@ -9,10 +9,10 @@
       "value": ""
     },
     "deploymentId": {
-      "value": "alsglobal"
+      "value": "alsglobalarm"
     },
     "hubDeploymentId": {
-      "value": "alsglobal"
+      "value": "alsglobalarm"
     },
     "location": {
       "value": "westus2"
@@ -75,7 +75,7 @@
       "value": "Password12345!!"
     },
     "clusterDnsPrefix": {
-      "value": "webfrontend-bx-aks"
+      "value": "alsglobal-arm-aks"
     },
     "kubernetesVersion": {
       "value": "1.21.7"

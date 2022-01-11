@@ -295,7 +295,6 @@
       "properties": {
         "administratorLogin": "[parameters('sqlServerLogin')]",
         "administratorLoginPassword": "[parameters('sqlServerPassword')]",
-        "publicNetworkAccess": "Disabled",
         "version": "[parameters('sqlServerVersion')]"
       },
       "name": "[variables('sqlServerNameTidy')]",

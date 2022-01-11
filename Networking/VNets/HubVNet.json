@@ -227,7 +227,7 @@
                   "properties": {
                       "addressPrefix": "[parameters('hubAgentSubnetAddressPrefix')]",
                       "delegations": [],
-                      "privateEndpointNetworkPolicies": "Enabled",
+                      "privateEndpointNetworkPolicies": "Disabled",
                       "privateLinkServiceNetworkPolicies": "Enabled",
                       "networkSecurityGroup": {
                           "id": "[variables('hubNSG_id')]"

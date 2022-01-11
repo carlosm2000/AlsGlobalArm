@@ -2,7 +2,7 @@
 
 $deploymentName = "AlsGlobal01"
 $deploymentNamek8s = "alsglobal-01-k8s"
-$resourceGroup = "ALSGlobal-ARM"
+$resourceGroup = "ALSGlobal-ARM-01"
 
 $templateFile = "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/master/azuredeploy.json?token=GHSAT0AAAAAABMBPMD4FQSPWZ3BWKLIMKQKYO55DUQ"
 $templateFilek8s = "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/master/azuredeployk8s.json?token=GHSAT0AAAAAABMBPMD5VRAZ2WBWRD34YE2WYO55EBQ"

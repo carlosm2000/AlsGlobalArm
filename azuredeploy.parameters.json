@@ -6,13 +6,13 @@
       "value": "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/master/"
     },
     "templateLinkAccessToken": {
-      "value": "?sv=2020-08-04&ss=bf&srt=sco&sp=rwdlacitfx&se=2022-12-23T10:22:10Z&st=2021-12-23T02:22:10Z&spr=https&sig=a7BeN2B0XVR2SsVlW34VKGK02HNe%2FyQXnQOANmIzlFQ%3D"
+      "value": ""
     },
     "deploymentId": {
-      "value": "alsglobal-id-01"
+      "value": "alsglobal"
     },
     "hubDeploymentId": {
-      "value": "alsglobal-id-01"
+      "value": "alsglobal"
     },
     "location": {
       "value": "westus2"

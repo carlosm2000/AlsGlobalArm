@@ -1,0 +1,205 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "variables": {
+    "apiVersion": {
+      "keyvault": "2021-06-01-preview",
+      "privateEndpoint": "2020-11-01",
+      "privateDnsZones": "2018-09-01",
+      "privateDnsZoneGroups": "2020-03-01"
+    },
+    "keyVaultNameTidy": "[toLower(trim(parameters('keyVaultName')))]",
+    "tenantId": "[subscription().tenantId]",
+    "keyvaultPrivateEndpointNameTidy":"[toLower(trim(parameters('keyvaultPrivateEndpointName')))]",
+    "spokeVNetNameTidy": "[toLower(trim(parameters('spokeVNetName')))]",
+    "spokePrivateSubnetNameTidy": "[toLower(trim(parameters('spokePrivateSubnetName')))]",
+    "keyvaultPrivateDnsZoneName": "privatelink.vaultcore.azure.net",
+
+    "sitecore-adminpassword": "[toLower(trim(parameters('scAdminPasswordSecret')))]",
+
+    "keyvault_id": "[resourceId('Microsoft.KeyVault/vaults/', variables('keyVaultNameTidy'))]",
+    "spokePrivateSubnet_id": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('spokeVNetNameTidy'),variables('spokePrivateSubnetNameTidy'))]",
+    "spokeVNet_id": "[resourceId('Microsoft.Network/virtualNetworks', variables('spokeVNetNameTidy'))]",
+    "keyvaultPrivateEndpoint_id": "[resourceId('Microsoft.Network/privateEndpoints', variables('keyvaultPrivateEndpointNameTidy'))]",
+    "keyvaultPrivateDnsZone_id": "[resourceId('Microsoft.Network/privateDnsZones', variables('keyvaultPrivateDnsZoneName'))]",
+    "managedIdentity_id": "[resourceId('Microsoft.ManagedIdentity/userAssignedIdentities/',parameters('clusterManagedIdentityName'))]"
+  },
+  "parameters": {
+    "deploymentId": {
+      "type": "string",
+      "defaultValue": "[resourceGroup().name]"
+    },
+    "location": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[resourceGroup().location]"
+    },
+    "keyVaultName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-keyVault')]"
+    },
+    "clusterManagedIdentityName": {
+      "type": "string",
+      "minLength": 1
+    },
+    "keyvaultPrivateEndpointName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-kv-private-endpoint')]"
+    },
+    "spokeVNetName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-Spoke-VNet')]"
+    },
+    "spokePrivateSubnetName": {
+      "type": "string",
+      "minLength": 1,
+      "defaultValue": "[concat(parameters('deploymentId'), '-Private-Subnet')]"
+    },
+    "scAdminPasswordSecret": {
+      "type": "securestring",
+      "minLength": 8,
+      "defaultValue": "[concat(parameters('deploymentId'), '-sitecore-adminpassword')]"
+    },
+    "sitecoreAdminPassword": {
+      "type": "securestring",
+      "minLength": 8
+    }
+  },
+  "resources": [
+    {
+      "type": "Microsoft.KeyVault/vaults",
+      "apiVersion": "[variables('apiVersion').keyvault]",
+      "name": "[variables('keyVaultNameTidy')]",
+      "location": "[parameters('location')]",
+      "properties": {
+        "sku": {
+          "family": "A",
+          "name": "Standard"
+        },
+        "tenantId": "[variables('tenantId')]",
+        "networkAcls": {
+          "bypass": "AzureServices",
+          "defaultAction": "Deny",
+          "ipRules": [],
+          "virtualNetworkRules": []
+        },
+        "enabledForDeployment": false,
+        "enabledForDiskEncryption": false,
+        "enabledForTemplateDeployment": false,
+        "enableSoftDelete": true,
+        "softDeleteRetentionInDays": 90,
+        "enableRbacAuthorization": false,
+        "provisioningState": "Succeeded",
+        "accessPolicies": [
+          {
+            "tenantId": "[variables('tenantId')]",
+            "objectId": "[reference(variables('managedIdentity_id'), '2018-11-30').principalId]",
+            "permissions": {
+              "keys": [
+                "Get",
+                "List"
+              ],
+              "secrets": [
+                "Get",
+                "List"
+              ],
+              "certificates": [
+                "Get",
+                "List",
+                "GetIssuers",
+                "ListIssuers"
+              ]
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones",
+      "apiVersion": "[variables('apiVersion').privateDnsZones]",
+      "name": "[variables('keyvaultPrivateDnsZoneName')]",
+      "location": "global",
+      "properties": {
+        "maxNumberOfRecordSets": 25000,
+        "maxNumberOfVirtualNetworkLinks": 1000,
+        "maxNumberOfVirtualNetworkLinksWithRegistration": 100
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateDnsZones/virtualNetworkLinks",
+      "apiVersion": "[variables('apiVersion').privateDnsZones]",
+      "name": "[concat(variables('keyvaultPrivateDnsZoneName'), '/kv_private_link')]",
+      "location": "global",
+      "dependsOn": [
+          "[variables('keyvaultPrivateDnsZone_id')]"
+      ],
+      "properties": {
+          "virtualNetwork": {
+              "id": "[variables('spokeVNet_id')]"
+          },
+          "registrationEnabled": false
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints",
+      "apiVersion": "[variables('apiVersion').privateEndpoint]",
+      "name": "[variables('keyvaultPrivateEndpointNameTidy')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[variables('keyvault_id')]"
+      ],
+      "properties": {
+        "privateLinkServiceConnections": [
+          {
+            "name": "[variables('keyvaultPrivateEndpointNameTidy')]",
+              "properties": {
+                "privateLinkServiceId": "[variables('keyvault_id')]",
+                "groupIds": [
+                    "vault"
+                ]
+              }
+          }
+        ],
+        "subnet": {
+            "id": "[variables('spokePrivateSubnet_id')]"
+        }
+      }
+    },
+    {
+      "type": "Microsoft.Network/privateEndpoints/privateDnsZoneGroups",
+      "apiVersion": "[variables('apiVersion').privateDnsZoneGroups]",
+      "name": "[concat(variables('keyvaultPrivateEndpointNameTidy'),'/', 'redisCache', 'PrivateDnsZoneGroup')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[variables('keyvaultPrivateDnsZone_id')]",
+        "[variables('keyvaultPrivateEndpoint_id')]"
+      ],
+      "properties": {
+        "privateDnsZoneConfigs": [
+          {
+            "name": "dnsConfig",
+            "properties": {
+              "privateDnsZoneId": "[variables('keyvaultPrivateDnsZone_id')]"
+            }
+          }
+        ]
+      }
+    },
+    {
+      "type": "Microsoft.KeyVault/vaults/secrets",
+      "apiVersion": "[variables('apiVersion').keyvault]",
+      "name": "[format('{0}/{1}', variables('keyVaultNameTidy'), variables('sitecore-adminpassword'))]",
+      "location": "[parameters('location')]",
+      "dependsOn":[
+        "[variables('keyvault_id')]"
+      ],
+      "properties": {
+        "value": "[parameters('sitecoreAdminPassword')]",
+        "enabled": true
+      }
+    }
+  ]
+}

@@ -102,7 +102,8 @@
     },
     "insightsWorkspaceName": {
       "type": "string",
-      "defaultValue": "[concat(parameters('deploymentId'), '-Insigths-Workspace')]",
+      // "defaultValue": "[concat(parameters('deploymentId'), '-Insigths-Workspace')]",
+      "defaultValue": "ALSGlobal-Website-loganalytics-DevQA",
       "metadata": {
         "description": "Log Analytics workspace name that has the Container Insights solution enabled"
       }

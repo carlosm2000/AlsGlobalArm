@@ -12,5 +12,5 @@ $templateFile = "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/mast
 $templateFilek8s = "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/master/azuredeployk8s.json?token=GHSAT0AAAAAABMBPMD5VRAZ2WBWRD34YE2WYO55EBQ"
 $parameterFile = "https://raw.githubusercontent.com/carlosm2000/AlsGlobalArm/master/azuredeploy.parameters.json?token=GHSAT0AAAAAABMBPMD4OOH2KE37GPURRRMEYO55EAQ"
 
-New-AzResourceGroupDeployment -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateUri $templateFile -TemplateParameterUri $parameterFile -debug
-# New-AzResourceGroupDeployment -Name $deploymentNamek8s -ResourceGroupName $resourceGroup -TemplateUri $templateFilek8s -TemplateParameterUri $parameterFile -debug
+# New-AzResourceGroupDeployment -Name $deploymentName -ResourceGroupName $resourceGroup -TemplateUri $templateFile -TemplateParameterUri $parameterFile -debug
+New-AzResourceGroupDeployment -Name $deploymentNamek8s -ResourceGroupName $resourceGroup -TemplateUri $templateFilek8s -TemplateParameterUri $parameterFile -debug

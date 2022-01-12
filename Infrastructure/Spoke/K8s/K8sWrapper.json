@@ -113,9 +113,9 @@
       "apiVersion": "[variables('resourcesApiVersion')]",
       "name": "[concat(parameters('deploymentId'), '-k8s-cluster')]",
       "type": "Microsoft.Resources/deployments",
-      "dependsOn": [
-        "[resourceId('Microsoft.Resources/deployments',concat(parameters('deploymentId'), '-container-insights'))]"
-      ],
+      // "dependsOn": [
+      //   "[resourceId('Microsoft.Resources/deployments',concat(parameters('deploymentId'), '-container-insights'))]"
+      // ],
       "properties": {
         "mode": "Incremental",
         "templateLink": {

@@ -148,7 +148,7 @@
           },
           "windowsNode":{
             "count" : 1,
-            "vmSize": "Standard_DS4_v2"
+            "vmSize": "Standard_DS2_v2"
           },
           "availabilityZones":{
             "zone": [ "1" ]

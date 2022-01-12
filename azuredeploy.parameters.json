@@ -9,13 +9,13 @@
       "value": ""
     },
     "deploymentId": {
-      "value": "alsglobalarm"
+      "value": "alsglobal"
     },
     "hubDeploymentId": {
-      "value": "alsglobalarm"
+      "value": "alsglobal"
     },
     "location": {
-      "value": "eastus"
+      "value": "centralus"
     },
     "sitecoreSKU": {
       "value": "Small"
@@ -75,13 +75,13 @@
       "value": "Password12345!!"
     },
     "clusterDnsPrefix": {
-      "value": "alsglobal-arm-aks"
+      "value": "alsglobal-aks"
     },
     "kubernetesVersion": {
       "value": "1.21.7"
     },
     "clusterManagedIdentityName": {
-      "value": "sitecoreAlsMngIdent"
+      "value": "alsManagedIdentity"
     },
     "clusterWindowsUsername": {
       "value": "windowsusername"

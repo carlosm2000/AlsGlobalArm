@@ -9,10 +9,10 @@
       "value": ""
     },
     "deploymentId": {
-      "value": "alsglobal"
+      "value": "alsglobalarm"
     },
     "hubDeploymentId": {
-      "value": "alsglobal"
+      "value": "alsglobalarm"
     },
     "location": {
       "value": "westus2"

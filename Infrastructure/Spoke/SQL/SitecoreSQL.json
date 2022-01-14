@@ -298,6 +298,7 @@
         "version": "[parameters('sqlServerVersion')]"
       },
       "name": "[variables('sqlServerNameTidy')]",
+      "dependsOn": [ "[variables('elasticPool_id')]" ],
       "location": "[parameters('location')]",
       "tags": {
         "provider": "[variables('sitecoreTags').provider]"
@@ -320,7 +321,7 @@
       "name": "[concat(variables('sqlServerNameTidy'), '/', variables('elasticPoolNameTidy'))]",
       "apiVersion": "[variables('apiVersion').pool]",
       "location": "[parameters('location')]",
-      "dependsOn": [ "[variables('sqlServer_id')]" ],
+      // "dependsOn": [ "[variables('sqlServer_id')]" ],
       "sku": {
           "name": "[parameters('resourceSizes').elasticPool.skuName]",
           "tier": "[parameters('resourceSizes').elasticPool.skuTier]",
